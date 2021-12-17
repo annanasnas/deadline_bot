@@ -8,6 +8,11 @@ from functools import partial
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+'''
+updater: объект, который умеет связываться 
+с сервером телеграма и получать от него обновления
+number: число дедлайнов пользователя
+'''
 updater = None
 number = 1
 
