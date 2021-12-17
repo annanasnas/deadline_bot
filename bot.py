@@ -90,7 +90,7 @@ def job2(update, context):
   '''
   update.message.reply_text("Выпрями спинку")
 
-def job4(update, context):
+def show_deadlines(update, context):
   '''
     Функция вывода пользователю информации обо всех дедлайнах,
     учитывая их временные промежутки.
@@ -114,7 +114,7 @@ def job4(update, context):
           update.message.reply_text(f"До дедлайна {name} осталось меньше 3 часов. Успей до {hours}:{mins}")
 
       if int(current_hours) == int(hours) and int(current_min) == int(mins):
-          update.message.reply_text(f"Дедлай {name} прошел")
+          update.message.reply_text(f"Дедлайн {name} прошел")
 
 def job5(update, context):
   '''
@@ -123,6 +123,23 @@ def job5(update, context):
   schedule.clear('deadlines')
   stop
 
+def check_deadline(update, context):
+  '''
+    Функция проверки наступления дедлайна
+  '''
+  global number
+  for i in range(1, number+1):
+    # 0: DEADname
+    # 1: DEADtime
+    name = context.user_data['DEADline'][i][0]
+    hours = context.user_data['DEADline'][i][1].strftime('%H')
+    mins = context.user_data['DEADline'][i][1].strftime('%M')
+    current_hours = datetime.datetime.today().strftime('%H')
+    current_min = datetime.datetime.today().strftime('%M')
+    
+    if int(current_hours) == int(hours) and int(current_min) == int(mins):
+        update.message.reply_text(f"Дедлайн {name} прошел")
+
 
 # start watching
 def follow(update, context):
@@ -130,9 +147,10 @@ def follow(update, context):
     Функция, отображающая логику напоминаний о дедлайнах
   '''
   update.message.reply_text("Я слежу")
-  schedule.every(60).seconds.do(partial(job, update, context)).tag('deadlines')
-  schedule.every(90).seconds.do(partial(job2, update, context)).tag('deadlines')
-  schedule.every(30).seconds.do(partial(job4, update, context)).tag('deadlines')
+  schedule.every(60).minutes.do(partial(job, update, context)).tag('deadlines')
+  schedule.every(90).minutes.do(partial(job2, update, context)).tag('deadlines')
+  schedule.every(30).minutes.do(partial(show_deadlines, update, context)).tag('deadlines')
+  schedule.every(1).minutes.do(partial(check_deadline, update, context)).tag('deadlines')
   schedule.every().day.at('23:59').do(job5)
   while True:
       schedule.run_pending()
@@ -148,7 +166,7 @@ def help(update, context):
   '''
     Функци, отображающая для пользователя все возможные команды бота.
   '''
-  update.message.reply_text("mrrrr help")
+  update.message.reply_text("Напиши /stop, если хочешь выйти")
 
 def start(update, context):
   '''
