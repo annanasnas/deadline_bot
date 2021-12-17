@@ -8,6 +8,11 @@ from functools import partial
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+'''
+updater: объект, который умеет связываться 
+с сервером телеграма и получать от него обновления
+number: число дедлайнов пользователя
+'''
 updater = None
 number = 1
 
@@ -146,7 +151,7 @@ def follow(update, context):
   '''
     Функция, отображающая логику напоминаний о дедлайнах
   '''
-  update.message.reply_text("Начиная ботать. Я слежу")
+  update.message.reply_text("Начинай ботать. Я слежу")
   schedule.every(60).minutes.do(partial(job, update, context)).tag('deadlines')
   schedule.every(90).minutes.do(partial(job2, update, context)).tag('deadlines')
   schedule.every(30).minutes.do(partial(show_deadlines, update, context)).tag('deadlines')
