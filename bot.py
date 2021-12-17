@@ -138,7 +138,7 @@ def check_deadline(update, context):
     current_min = datetime.datetime.today().strftime('%M')
     
     if int(current_hours) == int(hours) and int(current_min) == int(mins):
-        update.message.reply_text(f"Дедлайн {name} прошел")
+      update.message.reply_text(f"Дедлайн {name} прошел")
 
 
 # start watching
@@ -153,8 +153,8 @@ def follow(update, context):
   schedule.every(1).minutes.do(partial(check_deadline, update, context)).tag('deadlines')
   schedule.every().day.at('23:59').do(job5)
   while True:
-      schedule.run_pending()
-      time.sleep(30)
+    schedule.run_pending()
+    time.sleep(30)
 
 def ask(update, context):
   '''
@@ -187,6 +187,7 @@ def stop(update, context):
     Функция остановки бота. Прощание с пользователем.
   '''
   update.message.reply_text("Пока!")
+  updater.stop()
   return ConversationHandler.END
 
 def start_bot():
